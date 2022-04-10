@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 style="text-align: center;">Jobs</h1>
+    {% if current_user.is_authenticated %}
+        <a href="addjob" class="btn btn-secondary">Add job</a>
+    {% endif %}
+    {% for item in jobs%}
+        <div class="all"  style="margin-top: 30px;">
+            <h1>Job №{{ item[0] + 1 }}</h1>
+            <div class="col-md6 border rounded">
+                <div class="container">
+                    <div class="row align-items-start" style="background-color: #cfcfcf">
+                        <div class="col">
+                            <h4>Title of job</h4>
+                        </div>
+                        <div class="col">
+                            <h4>Team Leader</h4>
+                        </div>
+                        <div class="col">
+                             <h4>Duration</h4>
+                        </div>
+                        <div class="col">
+                            <h4>List of collaborators</h4>
+                        </div>
+                        <div class="col">
+                            <h4>Is finished</h4>
+                        </div>
+                    </div>
+                    <div class="row align-items-start" style="background-color: #e3f3ff;">
+                        <div class="col">
+                            <h5>{{ item[1].job }}</h5>
+                        </div>
+                        <div class="col">
+                            <h5>{{ item[1].team_leader }}</h5>
+                        </div>
+                        <div class="col">
+                            <h5>{{ item[1].work_size }} hours</h5>
+                        </div>
+                        <div class="col">
+                           <h5>{{ item[1].collaborators }}</h5>
+                        </div>
+                        {% if item[1].is_finished == False %}
+                            <div class="col">
+                                <h5>Job is not finished yet!</h5>
+                            </div>
+                        {% else %}
+                            <div class="col">
+                                <h5>Job has finished already!</h5>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% if current_user.is_authenticated and (current_user == item[1].user or current_user.id == 1) %}
+                <div>
+                    <a href="/edit_job/{{ item[1].id }}" class="btn btn-warning" role="button">
+                        Edit
+                    </a>
+                    <a href="/delete_job/{{ item[1].id }}" class="btn btn-danger">      
+                        Delete
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+{% endblock %}
